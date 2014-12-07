@@ -1,0 +1,15 @@
+FILE_PATH=$1
+HOST_FOLDER=compilers-vm
+IS_REMOTE=$?
+if [[ $rc != 0 ]] ; then
+    FILE_PATH=`echo ${FILE_PATH} | sed -e "s#.*${HOST_FOLDER}.##g"`
+    # for windows: something like this might work, but it has not been tested since I don't have windows
+    # FILE_PATH=`echo $FILE_PATH | tr '\\' '/'`
+fi
+
+echo "in '/vagrant', running '${FILE_PATH}'"
+
+pushd "/vagrant"
+    FILE_WITHOUT_EXT=`echo ${FILE_PATH} | sed s/\.[^\.]*$//`
+    /usr/class/cs143/cool/bin/coolc ${FILE_PATH} && /usr/class/cs143/cool/bin/spim ${FILE_WITHOUT_EXT}.s
+popd
